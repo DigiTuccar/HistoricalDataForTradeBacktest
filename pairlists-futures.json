@@ -1,0 +1,27 @@
+{
+  "trading_mode": "futures",
+  "margin_mode": "isolated",
+  "dataformat_ohlcv": "feather",
+  "dataformat_trades": "feather",
+  "exchange": {
+    "ccxt_config": {
+      "options": {
+        "defaultType": "future"
+      },
+      "aiohttp_proxy": "http://173.212.222.126:3128/",
+      "proxies": {
+        "http": "http://173.212.222.126:3128/",
+        "https": "http://173.212.222.126:3128/"
+      },
+      "enableRateLimit": true,
+      "timeout": 60000
+    },
+    "ccxt_async_config": {
+      "options": {
+        "defaultType": "future"
+      },
+      "enableRateLimit": true,
+      "timeout": 60000
+    }
+  }
+}

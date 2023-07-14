@@ -1,0 +1,243 @@
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS'
+      when: never
+    - if: '$CI_COMMIT_BRANCH'
+
+variables:
+  CI_DEBUG_TRACE: "false"
+  GIT_LFS_SKIP_SMUDGE: "false"
+
+
+
+stages:
+  - build
+  - deploy
+  - release
+
+
+
+build:
+  image: docker/compose:latest
+  # services:
+  #   - name: docker:dind
+  #     alias: docker
+  #     # in our experience although you'd assume this would be sufficient, this did
+  #     # nothing to prevent connection errors without `DOCKER_TLS_CERTDIR` being set
+  #     # to an empty string, and I would call that beyond mildly infuriating.
+  #     command: ["--tls=false"]
+  # variables:
+  #   DOCKER_HOST: tcp://docker:2375
+  #   # could be wrong here but although Docker defaults to overlay2,
+  #   # Docker-in-Docker (DIND) does not according to the following GitLab doc:
+  #   # https://docs.gitlab.com/ee/ci/docker/using_docker_build.html#use-the-overlayfs-driver
+  #   DOCKER_DRIVER: overlay2
+  #   DOCKER_TLS_CERTDIR: ""
+
+  stage: build
+  before_script:
+    - sudo chown -R $(id -u):$(id -g) .
+    - docker info
+    - docker version
+    - git reset --hard HEAD
+
+  script:
+    - git status
+    - git remote set-url origin "https://gitlab-ci-token:${EXCHANGE_DATA_COMMIT_ACCESS_TOKEN:-$CI_JOB_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git"
+    # - docker compose --env-file backtesting-binance-futures.env run download-data
+    - docker compose --env-file backtesting-okx-futures.env run download-data
+    # - docker compose --env-file backtesting-kucoin-futures.env run download-data
+    # - docker compose --env-file backtesting-binance-spot.env run download-data
+    # - docker compose --env-file backtesting-okx-spot.env run download-data
+    # - docker compose --env-file backtesting-kucoin-spot.env run download-data
+    # - docker compose --env-file backtesting-binance.env run download-data
+    # - sudo chown -R $(id -u):$(id -g) .
+    # - git status
+    # - git add -u .
+    # - git status
+    # - git commit -m "update data" -m "job url $CI_JOB_URL"
+    # - git status
+    # - git push -uf origin main
+    # - git status
+
+
+
+# git-update:
+#   image: iterativeai/cml:0-dvc2-base1
+#   before_script:
+#     - sudo chown -R $(id -u):$(id -g) .
+#   # image: iterativeai/cml:0-dvc2-base1-gpu
+#   stage: deploy
+#   script:
+#     - git status
+#     - git commit -m "update data" -m "job url $CI_JOB_URL"
+#     - git push
+
+
+include:
+  - remote: "https://gitlab.com/yesolutions/gitlab-ci-templates/raw/main/templates/pre-commit-autofix.yaml"
+  - local: "exchange-data-auto-updata.yml"
+
+
+# publish:
+#   stage: deploy
+#   rules:
+#     - if: '$CI_DEFAULT_BRANCH == $CI_COMMIT_BRANCH'
+#   script:
+#     - docker login registry.gitlab.com -u container-deploy-token -p $CONTAINER_DEPLOY_TOKEN
+#     # TODO: pull cache from main
+#     - docker build -t registry.gitlab.com/yesolutions/docker-pre-commit:"$CI_PIPELINE_IID" .
+#     - docker push registry.gitlab.com/yesolutions/docker-pre-commit:"$CI_PIPELINE_IID"
+
+# release:
+#   rules:
+#     - if: '$CI_DEFAULT_BRANCH == $CI_COMMIT_BRANCH'
+#       when: manual
+#   stage: release
+#   script:
+#     - docker login registry.gitlab.com -u container-deploy-token -p $CONTAINER_DEPLOY_TOKEN
+#     - docker pull registry.gitlab.com/yesolutions/docker-pre-commit:"$CI_PIPELINE_IID"
+#     - docker tag registry.gitlab.com/yesolutions/docker-pre-commit:"$CI_PIPELINE_IID" registry.gitlab.com/yesolutions/docker-pre-commit:latest
+#     - docker tag registry.gitlab.com/yesolutions/docker-pre-commit:"$CI_PIPELINE_IID" registry.gitlab.com/yesolutions/docker-pre-commit:"$CI_COMMIT_SHORT_SHA"
+#     - docker push registry.gitlab.com/yesolutions/docker-pre-commit:"$CI_COMMIT_SHORT_SHA"
+#     - docker push registry.gitlab.com/yesolutions/docker-pre-commit:latest
+
+
+
+
+# build:docker:
+#   image: docker:20-dind
+#   variables:
+#     # using "docker" as the host is only possible if you alias the service below
+#     DOCKER_HOST: tcp://docker:2375
+#     # could be wrong here but although Docker defaults to overlay2,
+#     # Docker-in-Docker (DIND) does not according to the following GitLab doc:
+#     # https://docs.gitlab.com/ee/ci/docker/using_docker_build.html#use-the-overlayfs-driver
+#     DOCKER_DRIVER: overlay2
+#     DOCKER_TLS_CERTDIR: ""
+#   services:
+#     - name: docker:20-dind
+#       alias: docker
+#       # in our experience although you'd assume this would be sufficient, this did
+#       # nothing to prevent connection errors without `DOCKER_TLS_CERTDIR` being set
+#       # to an empty string, and I would call that beyond mildly infuriating.
+#       command: ["--tls=false"]
+#   before_script:
+#     - docker info
+#   script:
+#     - git rev-list --objects --all | grep -f <(git verify-pack -v .git/objects/pack/*.idx| sort -k 3 -n | cut -f 1 -d " " | tail -10)
+#     - export
+#     - docker compose run download-data
+#     - git status
+
+
+# create-CML-report:
+#   needs: [build:docker]
+#   image: iterativeai/cml:0-dvc2-base1
+#   script:
+#     # Post CML report as a comment in GitLab
+#     - export
+#     - git rev-list --objects --all | grep -f <(git verify-pack -v .git/objects/pack/*.idx| sort -k 3 -n | cut -f 1 -d " " | tail -10)
+#     # - cat metrics.txt >> report.md
+#     # - echo '![](./plot.png "Confusion Matrix")' >> report.md
+#     # - cml comment create report.md
+#     - git add -A
+#     - git commit -am "Delete all previous commit"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# deploy:
+#   stage: deploy
+#   variables:
+#     CI_DEBUG_TRACE: "true"
+#     GIT_LFS_SKIP_SMUDGE: "false"
+#   before_script:
+#     - 'which ssh-agent || ( apt-get update -qy && apt-get install openssh-client -qqy )'
+#     - eval `ssh-agent -s`
+#     # - echo "${SSH_PRIVATE_KEY}" | tr -d '\r' | ssh-add - > /dev/null # add ssh ke
+#     # - mkdir -p ~/.ssh
+#     # - chmod 700 ~/.ssh
+#     # - echo "$SSH_PUBLIC_KEY" >> ~/.ssh/id_rsa.pub
+#     # - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+#   script:
+#     - export
+#     # - git config --global user.email "${GITLAB_USER_EMAIL}"
+#     # - git config --global user.name "${GITLAB_USER_NAME}"
+#     # - git add -f *.pdf # Force add PDF since we .gitignored it
+#     # - git commit -m "Compiled PDF from $CI_COMMIT_SHORT_SHA [skip ci]" || echo "No changes, nothing to commit!"
+#     # - git remote rm origin && git remote add origin git@gitlab.com:$CI_PROJECT_PATH.git
+#     # - git push origin HEAD:$CI_COMMIT_REF_NAME # Pushes to the same branch as the trigger
+
+# download-data:
+#   stage: test
+#   variables:
+#     CI_DEBUG_TRACE: "true"
+#     GIT_LFS_SKIP_SMUDGE: "false"
+#   script:
+#     - pwd
+#     - export
+#     - git status
+#     - git config -l
+#     - docker-compose run --rm download-data
+#     - git status
+#     - git add binance/*.feather
+#     - git status
+#     - git add binance/futures/*.feather
+#     - git status
+#     - git commit -a -m "Update Binance exchange data"
+#     - git status
+#     # - git config --global user.email "${GITLAB_USER_EMAIL}"
+#     # - git config --global user.name "${GITLAB_USER_NAME}"
+#     - git remote -v
+#     - git config -l
+#     - git checkout --orphan latest_branch
+#     - git lfs install
+#     - git add -A
+#     - git commit -am "Initial commit message" #Committing the changes
+#     - git branch -D develop #Deleting master branch
+#     - git branch -m develop #renaming branch as master
+#     - git push -f origin develop #pushes to master branch
+#     - git gc --aggressive --prune=all # remove the old files
+#     # - git push origin HEAD:refs/heads/develop --force
+#     - git status
+#     - tree
+
+
+
+
+
+# git-kontrol:
+#   stage: test
+#   # image:
+#   #   name: gitlab/gitlab-runner-helper
+#   needs: ['download-data']
+#   script:
+#     - git status
+#     - git add binance/*.feather
+#     - git status
+#     - git add binance/futures/*.feather
+#     - git status
+#     - git add kucoin/*.feather
+#     - git status
+#     - git add kucoin/futures/*.feather
+#     - git status
+#     - git commit -a -m "Update Binance exchange data"
+#     - git status
+#     - ls -laR

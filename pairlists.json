@@ -1,0 +1,33 @@
+{
+  "max_open_trades": 10,
+  "stake_currency": "USDT",
+  "stake_amount": "unlimited",
+  "tradable_balance_ratio": 0.99,
+  "fiat_display_currency": "USD",
+  "dry_run": false,
+  "dry_run_wallet": 10000,
+  "cancel_open_orders_on_exit": false,
+  "unfilledtimeout": {
+    "entry": 15,
+    "exit": 15,
+    "unit": "minutes"
+  },
+  "entry_pricing": {
+    "price_side": "same",
+    "price_last_balance": 0.0,
+    "use_order_book": false,
+    "order_book_top": 1,
+    "check_depth_of_market": {
+      "enabled": false,
+      "bids_to_ask_delta": 1
+    }
+  },
+  "exit_pricing": {
+    "price_side": "same",
+    "use_order_book": false,
+    "order_book_min": 1,
+    "order_book_max": 1
+  },
+  "dataformat_ohlcv": "feather",
+  "dataformat_trades": "feather"
+}

@@ -1,0 +1,17 @@
+{
+  "stake_currency": "USDT",
+  "exchange": {
+    "name": "okx",
+    "pair_whitelist": [
+      ".*/USDT"
+    ],
+    "enableRateLimit": true,
+    "rateLimit": 400,
+    "timeout": 60000
+  },
+  "ccxt_async_config": {
+    "enableRateLimit": true,
+    "rateLimit": 400,
+    "timeout": 60000
+  }
+}

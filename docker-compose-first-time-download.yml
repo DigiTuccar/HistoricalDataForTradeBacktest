@@ -1,0 +1,16 @@
+---
+version: '3'
+services:
+  download-data:
+    image: freqtradeorg/freqtrade:stable
+    container_name: freqtrade-${EXCHANGE:-binance}-${TRADINGMODE:-spot}-data-downloader
+    volumes:
+      - ".:/freqtrade/user_data/data"
+    command: >
+      download-data
+      --timerange ${START_DATE:-20191201}-${END_DATE:-20230701}
+      --timeframe ${TIMEFRAMES-5m 1h 1d}
+      --datadir user_data/data/${EXCHANGE:-binance}
+      --tradingmode ${TRADINGMODE:-spot}
+      --config user_data/data/pairlists-${TRADINGMODE:-spot}.json
+      --config user_data/data/${EXCHANGE:-binance}-usdt-${TRADINGMODE:-spot}.json
