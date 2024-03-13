@@ -1,0 +1,8 @@
+{
+  "stake_currency": "USDT",
+  "exchange": {
+    "name": "kucoin",
+    "pairlists": [{ "method": "StaticPairList" }],
+    "pair_whitelist": [".*/USDT"]
+  }
+}

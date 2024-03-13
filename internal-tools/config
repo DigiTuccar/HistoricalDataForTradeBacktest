@@ -1,0 +1,21 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+	url = https://code.denomas.com/digittuccar/historical-data-for-back-tests.git
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[filter "lfs"]
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+[credential]
+	helper = store
+[http]
+	postBuffer = 2147483648
+[ssh]
+	postBuffer = 2147483648
+[lfs "https://code.denomas.com/digittuccar/historical-data-for-back-tests.git/info/lfs"]
+	access = basic

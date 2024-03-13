@@ -1,0 +1,81 @@
+ 
+ === Binance ===
+
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-spot.json --timeframe 1d 4h 1h 15m 5m 3m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-binance-spot-usdt-2023.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-spot.json --timeframe 1d 4h 1h 15m 5m 3m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-binance-spot-usdt-2022.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-spot.json --timeframe 1d 4h 1h 15m 5m 3m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-binance-spot-usdt-2021.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-spot.json --timeframe 1d 4h 1h 15m 5m 3m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-binance-spot-usdt-2020.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-spot.json --timeframe 1d 4h 1h 15m 5m 3m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-binance-spot-usdt-2019.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-spot.json --timeframe 1d 4h 1h 15m 5m 3m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-binance-spot-usdt-2018.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-spot.json --timeframe 1d 4h 1h 15m 5m 3m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-binance-spot-usdt-2017.json
+
+
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-futures.json --timeframe 1d 4h 1h 15m 5m 3m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-binance-futures-usdt-2023.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-futures.json --timeframe 1d 4h 1h 15m 5m 3m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-binance-futures-usdt-2022.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-futures.json --timeframe 1d 4h 1h 15m 5m 3m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-binance-futures-usdt-2021.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-futures.json --timeframe 1d 4h 1h 15m 5m 3m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-binance-futures-usdt-2020.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-futures.json --timeframe 1d 4h 1h 15m 5m 3m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-binance-futures-usdt-2019.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-futures.json --timeframe 1d 4h 1h 15m 5m 3m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-binance-futures-usdt-2018.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-futures.json --timeframe 1d 4h 1h 15m 5m 3m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-binance-futures-usdt-2017.json
+
+
+
+ === OKX ===
+
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-spot.json --timeframe 1d 4h 1h 15m 5m 3m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-okx-spot-usdt-2023.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-spot.json --timeframe 1d 4h 1h 15m 5m 3m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-okx-spot-usdt-2022.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-spot.json --timeframe 1d 4h 1h 15m 5m 3m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-okx-spot-usdt-2021.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-spot.json --timeframe 1d 4h 1h 15m 5m 3m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-okx-spot-usdt-2020.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-spot.json --timeframe 1d 4h 1h 15m 5m 3m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-okx-spot-usdt-2019.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-spot.json --timeframe 1d 4h 1h 15m 5m 3m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-okx-spot-usdt-2018.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-spot.json --timeframe 1d 4h 1h 15m 5m 3m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-okx-spot-usdt-2017.json
+
+
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-futures.json --timeframe 1d 4h 1h 15m 5m 3m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-okx-futures-usdt-2023.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-futures.json --timeframe 1d 4h 1h 15m 5m 3m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-okx-futures-usdt-2022.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-futures.json --timeframe 1d 4h 1h 15m 5m 3m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-okx-futures-usdt-2021.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-futures.json --timeframe 1d 4h 1h 15m 5m 3m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-okx-futures-usdt-2020.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-futures.json --timeframe 1d 4h 1h 15m 5m 3m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-okx-futures-usdt-2019.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-futures.json --timeframe 1d 4h 1h 15m 5m 3m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-okx-futures-usdt-2018.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-futures.json --timeframe 1d 4h 1h 15m 5m 3m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-okx-futures-usdt-2017.json
+
+
+ === Kucoin ===
+
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-spot.json --timeframe 1d 4h 1h 15m 5m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-kucoin-spot-usdt-2023.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-spot.json --timeframe 1d 4h 1h 15m 5m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-kucoin-spot-usdt-2022.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-spot.json --timeframe 1d 4h 1h 15m 5m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-kucoin-spot-usdt-2021.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-spot.json --timeframe 1d 4h 1h 15m 5m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-kucoin-spot-usdt-2020.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-spot.json --timeframe 1d 4h 1h 15m 5m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-kucoin-spot-usdt-2019.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-spot.json --timeframe 1d 4h 1h 15m 5m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-kucoin-spot-usdt-2018.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-spot.json --timeframe 1d 4h 1h 15m 5m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-kucoin-spot-usdt-2017.json
+
+
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-futures.json --timeframe 1d 4h 1h 15m 5m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-okx-futures-usdt-2023.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-futures.json --timeframe 1d 4h 1h 15m 5m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-okx-futures-usdt-2022.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-futures.json --timeframe 1d 4h 1h 15m 5m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-okx-futures-usdt-2021.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-futures.json --timeframe 1d 4h 1h 15m 5m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-okx-futures-usdt-2020.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-futures.json --timeframe 1d 4h 1h 15m 5m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-okx-futures-usdt-2019.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-futures.json --timeframe 1d 4h 1h 15m 5m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-okx-futures-usdt-2018.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-futures.json --timeframe 1d 4h 1h 15m 5m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-okx-futures-usdt-2017.json
+
+
+ === Gateio ===
+
+
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-spot.json --timeframe 1d 4h 1h 15m 5m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-gateio-spot-usdt-2023.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-spot.json --timeframe 1d 4h 1h 15m 5m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-gateio-spot-usdt-2022.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-spot.json --timeframe 1d 4h 1h 15m 5m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-gateio-spot-usdt-2021.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-spot.json --timeframe 1d 4h 1h 15m 5m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-gateio-spot-usdt-2020.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-spot.json --timeframe 1d 4h 1h 15m 5m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-gateio-spot-usdt-2019.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-spot.json --timeframe 1d 4h 1h 15m 5m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-gateio-spot-usdt-2018.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-spot.json --timeframe 1d 4h 1h 15m 5m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-gateio-spot-usdt-2017.json
+
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-futures.json --timeframe 1d 4h 1h 15m 5m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-gateio-futures-usdt-2023.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-futures.json --timeframe 1d 4h 1h 15m 5m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-gateio-futures-usdt-2022.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-futures.json --timeframe 1d 4h 1h 15m 5m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-gateio-futures-usdt-2021.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-futures.json --timeframe 1d 4h 1h 15m 5m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-gateio-futures-usdt-2020.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-futures.json --timeframe 1d 4h 1h 15m 5m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-gateio-futures-usdt-2019.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-futures.json --timeframe 1d 4h 1h 15m 5m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-gateio-futures-usdt-2018.json
+freqtrade download-data -c configs/exampleconfig.json -c configs/trading_mode-futures.json --timeframe 1d 4h 1h 15m 5m 1m --timerange 20230101-20240307 -c tests/backtests/pairs-available-gateio-futures-usdt-2017.json
+
