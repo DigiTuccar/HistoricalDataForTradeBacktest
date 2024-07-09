@@ -1,0 +1,28 @@
+---
+version: "3"
+services:
+  download-data-first-run:
+    image: freqtradeorg/freqtrade:stable
+    container_name: download-data-freqtrade-${EXCHANGE:-binance}-${TRADINGMODE:-spot}
+    volumes:
+      - ".:/freqtrade/user_data/data"
+    command: >
+      download-data
+      --timerange ${START_DATE:-20100101}-${END_DATE:-20231201}
+      --timeframe ${TIMEFRAMES-1d 4h 1h}
+      --config user_data/data/download-data-${EXCHANGE:-binance}-${TRADINGMODE:-spot}-usdt.json
+      --config user_data/data/download-data-${EXCHANGE:-binance}-blacklist.json
+      --config user_data/data/trading_mode-${TRADINGMODE:-spot}.json
+
+  download-data-prepend:
+    image: freqtradeorg/freqtrade:stable
+    container_name: freqtrade-${EXCHANGE:-binance}-${TRADINGMODE:-spot}-data-downloader
+    volumes:
+      - ".:/freqtrade/user_data/data"
+    command: >
+      download-data --prepend
+      --timerange ${START_DATE:-20100101}-${END_DATE:-20231201}
+      --timeframe ${TIMEFRAMES-1d 4h 1h}
+      --config user_data/data/download-data-${EXCHANGE:-binance}-${TRADINGMODE:-spot}-usdt.json
+      --config user_data/data/download-data-${EXCHANGE:-binance}-blacklist.json
+      --config user_data/data/trading_mode-${TRADINGMODE:-spot}.json

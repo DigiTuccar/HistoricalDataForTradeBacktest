@@ -1,0 +1,117 @@
+exchange-data-commit:
+  stage: release
+  rules:
+    - if: '$EXCHANGE_DATA_SKIP_BRANCH_PIPELINE && $CI_COMMIT_BRANCH'
+      when: never
+    - if: '$EXCHANGE_DATA_SKIP_MR_PIPELINE && $CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: never
+    - if: '$EXCHANGE_DATA_COMMIT_AUTO_UPDATE_BRANCH_ONLY && $CI_PIPELINE_SOURCE == "merge_request_event"'
+      variables:
+        EXCHANGE_DATA_COMMIT_AUTO_UPDATE: ""
+      when: on_success
+      exists:
+        - pairlists-spot.json
+    - if: '$EXCHANGE_DATA_COMMIT_DEDUPLICATE_MR_AND_BRANCH == "true" && $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS'
+      when: never
+    - if: '$EXCHANGE_DATA_COMMIT_AUTO_UPDATE_MR_ONLY && $CI_PIPELINE_SOURCE != "merge_request_event"'
+      variables:
+        EXCHANGE_DATA_COMMIT_AUTO_UPDATE: ""
+      exists:
+        - pairlists-spot.json
+      when: on_success
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_EVENT_TYPE != "detached"'
+      variables:  # we don't support autofix for merged_result or merge_train pipelines, configure branch fixing instead
+        EXCHANGE_DATA_COMMIT_AUTO_UPDATE: ""
+      exists:
+        - pairlists-spot.json
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      exists:
+        - pairlists-spot.json
+      when: on_success
+    - if: '$CI_COMMIT_BRANCH'
+      exists:
+        - pairlists-spot.json
+      when: on_success
+    - when: never
+
+  variables:
+    EXCHANGE_DATA_COMMIT_AUTO_UPDATE: "1"
+    EXCHANGE_DATA_COMMIT_DEDUPLICATE_MR_AND_BRANCH: "true"
+
+  image: registry.gitlab.com/yesolutions/docker-pre-commit
+  script: |
+    if [[ -n "$EXCHANGE_DATA_COMMIT_AUTO_UPDATE_BRANCH_ONLY" && -n "$EXCHANGE_DATA_COMMIT_AUTO_UPDATE_MR_ONLY" ]]; then
+        echo "invalid configuration. EXCHANGE_DATA_COMMIT_AUTO_UPDATE_BRANCH_ONLY and EXCHANGE_DATA_COMMIT_AUTO_UPDATE_MR_ONLY are mutually exclusive"
+        exit 1
+    fi
+
+    if [[ $EXCHANGE_DATA_DEBUG ]]; then
+        set -x
+        echo "DEBUGGING ENABLED" > /dev/stderr
+    fi
+
+    status=0
+    git status || status=$?
+    if [[ -n "$EXCHANGE_DATA_DEBUG" ]]; then
+        git status
+    fi
+    if [[ $status -ne 0 ]]; then
+        if [[ -n "$CI_COMMIT_BRANCH" ]]; then
+            git remote set-url origin "https://gitlab-ci-token:${DIGITUCCAR_GITLAB_PROJECT_ACCESS_TOKEN:-$CI_JOB_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git"
+            git fetch origin
+            git checkout $CI_COMMIT_BRANCH
+            if [[ -n "$EXCHANGE_DATA_DEBUG" ]]; then
+                git status
+            fi
+        fi
+        if [[ -n "$CI_MERGE_REQUEST_IID" ]]; then
+            git remote set-url origin "https://gitlab-ci-token:${DIGITUCCAR_GITLAB_PROJECT_ACCESS_TOKEN:-$CI_JOB_TOKEN}@${CI_SERVER_HOST}/${CI_MERGE_REQUEST_SOURCE_PROJECT_PATH}.git"
+            git fetch origin
+            if [[ -n "$EXCHANGE_DATA_DEBUG" ]]; then
+                git status
+            fi
+        fi
+
+    else
+        exit 0  # we're all good, pipeline can proceed
+    fi
+
+    if [[ -z "$EXCHANGE_DATA_COMMIT_AUTO_UPDATE" ]]; then
+        exit 1 # fail the job
+    fi
+
+    # TODO: make email/username configurable
+    git config --global user.email "$GITLAB_USER_EMAIL"
+    git config --global user.name "exchange-data-commit fix $GITLAB_USER_NAME"
+    if [[ -n "$EXCHANGE_DATA_DEBUG" ]]; then
+        git status
+    fi
+    # proceed with auto-fix
+
+    if [[ -z "$DIGITUCCAR_GITLAB_PROJECT_ACCESS_TOKEN" ]]; then
+        echo "Auto-fix is enabled, but no exchange-data-commit access token found." >> /dev/stderr
+        echo "To enable automatic fixes, please create a project access token with repository write scope and set the DIGITUCCAR_GITLAB_PROJECT_ACCESS_TOKEN variable" > /dev/stderr
+        exit 1
+    fi
+
+    if [[ -n "$CI_COMMIT_BRANCH" ]]; then
+        git add -u .
+        if [[ -n "$EXCHANGE_DATA_DEBUG" ]]; then
+            git status
+        fi
+        git commit -m "auto fixes from exchange-data-commit CI job" -m "job url: $CI_JOB_URL"
+        git push
+        exit 1
+    elif [[ -n "$CI_MERGE_REQUEST_IID" ]]; then
+        git add -u .
+        if [[ -n "$EXCHANGE_DATA_DEBUG" ]]; then
+            git status
+        fi
+        git commit -m "auto fixes from exchange-data-commit CI job" -m "job url: $CI_JOB_URL"
+        git push origin HEAD:"$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME"
+        exit 1
+    else
+       echo "Auto fix is not supported in this context" > /dev/stderr
+       echo "Auto fix is only available in branch and merge request pipelines" > /dev/stderr
+       exit 1
+    fi
