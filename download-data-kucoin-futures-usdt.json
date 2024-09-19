@@ -1,0 +1,17 @@
+{
+  "stake_currency": "USDT",
+  "exchange": {
+    "name": "kucoinfutures",
+    "pair_whitelist": [".*/USDT:USDT"],
+    "ccxt_config": {
+      "enableRateLimit": true,
+      "rateLimit": 200,
+      "timeout": 60000
+    },
+    "ccxt_async_config": {
+      "enableRateLimit": true,
+      "rateLimit": 200,
+      "timeout": 60000
+    }
+  }
+}

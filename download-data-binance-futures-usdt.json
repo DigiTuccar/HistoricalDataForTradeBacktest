@@ -1,0 +1,7 @@
+{
+  "stake_currency": "USDT",
+  "exchange": {
+    "name": "binance",
+    "pair_whitelist": [".*/USDT:USDT"],
+  }
+}
