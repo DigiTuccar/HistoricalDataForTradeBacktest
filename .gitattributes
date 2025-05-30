@@ -1,0 +1,3 @@
+*.feather binary
+* text=auto
+*.sh text eol=lf

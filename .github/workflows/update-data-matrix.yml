@@ -1,0 +1,86 @@
+name: Update Historical Data From Exchanges
+
+on: [workflow_dispatch]
+
+concurrency: 1
+
+jobs:
+
+  Download-Exchange-Data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3000
+    strategy:
+      fail-fast: false
+      matrix:
+        exchange:
+          - binance
+          - kucoin
+          - okx
+        tradingmode:
+          - spot
+          - futures
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          # fetch-depth: 0
+          persist-credentials: false
+          lfs: true
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - name: Prep Git
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git reset --hard HEAD
+          git status
+
+      - name: ${{ matrix.exchange }} ${{ matrix.tradingmode }} Backtesting Data Variables
+        id: exchange-tradingmode-dates
+        uses: falti/dotenv-action@v1.0.4
+        with:
+          log-variables: true
+          path:
+            backtesting-${{ matrix.exchange }}-${{ matrix.tradingmode }}.env
+
+      - name: Download ${{ matrix.exchange }} Data (${{ steps.exchange-tradingmode-dates.outputs.start_date }} - ${{ steps.exchange-tradingmode-dates.outputs.end_date }})
+        id: exchange-tradingmode-data-download
+        env:
+          START_DATE: ${{ steps.exchange-tradingmode-dates.outputs.start_date }}
+          END_DATE: ${{ steps.exchange-tradingmode-dates.outputs.end_date }}
+          EXCHANGE: ${{ matrix.exchange }}
+          TRADINGMODE: ${{ matrix.tradingmode }}
+        run: |
+          docker-compose run --rm download-data
+
+      - name: Fix File Ownership
+        run: |
+          sudo chown -R $(id -u):$(id -g) .
+
+      - name: Commit ${{ matrix.exchange }} Changed Files
+        id: commit-exchange-spot-changes
+        if: steps.exchange-tradingmode-data-download.outcome == 'success'
+        continue-on-error: true
+        run: |
+          git add ${{ matrix.exchange }}/*.feather
+          git commit -a -m "Update ${{ matrix.exchange }} exchange spot data from ${{ steps.exchange-tradingmode-dates.outputs.start_date }} to ${{ steps.exchange-tradingmode-dates.outputs.end_date }}"
+
+
+
+      - name: Commit ${{ matrix.exchange }} Changed Files
+        id: commit-exchange-futures-changes
+        if: steps.exchange-tradingmode-data-download.outcome == 'success'
+        continue-on-error: true
+        run: |
+          git add ${{ matrix.exchange }}/futures/*.feather
+          git commit -a -m "Update ${{ matrix.exchange }} exchange futures data from ${{ steps.exchange-tradingmode-dates.outputs.start_date }} to ${{ steps.exchange-tradingmode-dates.outputs.end_date }}"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        if: steps.commit-exchange-spot-changes.outcome == 'success' || steps.commit-exchange-futures-changes.outcome == 'success'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}

@@ -1,0 +1,17 @@
+{
+  "stake_currency": "USDT",
+  "exchange": {
+    "name": "gateio",
+    "pair_whitelist": [".*/USDT"],
+    "ccxt_config": {
+      "enableRateLimit": true,
+      "rateLimit": 50,
+      "timeout": 60000
+    },
+    "ccxt_async_config": {
+      "enableRateLimit": true,
+      "rateLimit": 50,
+      "timeout": 60000
+    }
+  }
+}
